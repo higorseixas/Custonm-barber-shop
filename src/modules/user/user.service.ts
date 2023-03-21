@@ -18,6 +18,9 @@ export class UserService {
                 cpf: true,
                 cellphone: true,
                 userType: true,
+                typeId: true,
+                scheduling: true,
+                os: true,
                 createdAt: true,
                 updatedAt: true,
             }
