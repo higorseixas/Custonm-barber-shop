@@ -27,7 +27,7 @@ model User {
   userType   UserTypes    @relation(fields: [typeId], references: [id])
   typeId     Int          @unique
   scheduling Scheduling[]
-  Os         Os[]
+  os         Os[]
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
 }
@@ -81,9 +81,9 @@ model Customer {
   cpf        String?      @unique
   name       String
   cellphone  String
-  email      String
+  email      String       @unique
   scheduling Scheduling[]
-  customer   Os[]
+  os         Os[]
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
 }
