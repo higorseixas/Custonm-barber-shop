@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model UserTypes {
+  id        Int      @id @default(autoincrement())
+  type      String   @unique
+  user      User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  cpf        String       @unique
+  password   String
+  name       String
+  cellphone  String
+  userType   UserTypes    @relation(fields: [typeId], references: [id])
+  typeId     Int          @unique
+  scheduling Scheduling[]
+  Os         Os[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+}
+
+model Scheduling {
+  id         Int      @id @default(autoincrement())
+  date       String
+  hour       String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+}
+
+model Os {
+  id         Int      @id @default(autoincrement())
+  price      String
+  pay_method String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  service    Service  @relation(fields: [serviceId], references: [id])
+  serviceId  Int      @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     String
+  service   Service  @relation(fields: [serviceId], references: [id])
+  serviceId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Service {
+  id        Int       @id @default(autoincrement())
+  product   Product[]
+  os        Os?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+}
+
+model Customer {
+  id         Int          @id @default(autoincrement())
+  cpf        String?      @unique
+  name       String
+  cellphone  String
+  email      String
+  scheduling Scheduling[]
+  customer   Os[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+}
