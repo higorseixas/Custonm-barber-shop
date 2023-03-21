@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Body, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserInterface } from '../interfaces/userInterface';
 import { PrismaService } from '../prisma/prisma.service';
 
