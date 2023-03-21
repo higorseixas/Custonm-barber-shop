@@ -11,24 +11,26 @@ export class UserService {
     ) { }
 
     async getAllUsers() {
-        return await this.prisma.user
-            .findMany({
-                select: {
-                    id: true,
-                    name: true,
-                    cpf: true,
-                    cellphone: true,
-                    userType: true,
-                    createdAt: true,
-                    updatedAt: true,
-                }
+        return await this.prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                cpf: true,
+                cellphone: true,
+                userType: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        })
+            .then((result) => result)
+            .catch((error) => {
+                console.log(error)
+                throw new Error(error.message)
             })
     }
 
     async createUser(requestUser: UserInterface) {
-        return await this.prisma.user.findUnique({
-            where: { cpf: requestUser.cpf }
-        })
+        return await this.getUser(requestUser.cpf)
             .then(async (user) => {
                 if (!user) {
                     return this.prisma.user.create({
@@ -51,7 +53,7 @@ export class UserService {
             })
             .catch((error) => {
                 console.log(error)
-                throw new Error('Erro ao buscar por usuário!')
+                throw new Error(error.message)
             })
     }
 
