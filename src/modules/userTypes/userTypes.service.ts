@@ -71,6 +71,11 @@ export class UserTypeService {
                             type: requestType.type
                         }
                     })
+                        .then((result) => result)
+                        .catch((error) => {
+                            console.error(error)
+                            throw new Error(error.message)
+                        })
                 }
             })
             .catch((error) => {
