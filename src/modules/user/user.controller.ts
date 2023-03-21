@@ -31,11 +31,11 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     async createUser(@Req() req) {
         const user: UserInterface = {
-            name: req.name,
-            cpf: req.cpf,
-            cellphone: req.cellphone,
-            password: req.password,
-            typeId: req.typeId
+            name: req.query.name,
+            cpf: req.query.cpf,
+            cellphone: req.query.cellphone,
+            password: req.query.password,
+            typeId: req.query.typeId
         }
         return await this.userService.createUser(user)
             .then((result) => result)
@@ -48,7 +48,7 @@ export class UserController {
     @Get('getUser')
     @HttpCode(HttpStatus.OK)
     async getUser(@Req() req) {
-        return await this.userService.getUser(req.cpf)
+        return await this.userService.getUser(req.query.cpf)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);
@@ -60,11 +60,11 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     async updateUser(@Req() req) {
         const user: UserInterface = {
-            name: req.name,
-            cpf: req.cpf,
-            cellphone: req.cellphone,
-            password: req.password,
-            typeId: req.typeId
+            name: req.query.name,
+            cpf: req.query.cpf,
+            cellphone: req.query.cellphone,
+            password: req.query.password,
+            typeId: req.query.typeId
         }
         return await this.userService.updateUser(user)
             .then((result) => result)
@@ -77,7 +77,7 @@ export class UserController {
     @Delete('deleteUser')
     @HttpCode(HttpStatus.OK)
     async deteleUser(@Req() req) {
-        return await this.userService.deleteUser(req.cpf)
+        return await this.userService.deleteUser(req.query.cpf)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);
