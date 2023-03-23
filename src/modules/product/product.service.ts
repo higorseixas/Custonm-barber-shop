@@ -54,8 +54,8 @@ export class ProductService {
             })
     }
 
-    async getProduct(id: string) {
-        return await this.prisma.product.findUnique({ where: { id } })
+    async getProduct(id: number) {
+        return await this.prisma.product.findUnique({ where: { id: id } })
             .then((result) => result)
             .catch((error) => {
                 console.error(error)
@@ -70,7 +70,7 @@ export class ProductService {
                     throw new Error('Produto não encontrado!')
                 } else {
                     return await this.prisma.product.update({
-                        where: { name: requesProduct.name },
+                        where: { id: product.id },
                         data: {
                             name: requesProduct.name,
                             price: requesProduct.price,
@@ -90,7 +90,7 @@ export class ProductService {
             })
     }
 
-    async deleteProduct(id: string) {
+    async deleteProduct(id: number) {
         return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
