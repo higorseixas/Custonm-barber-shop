@@ -28,8 +28,8 @@ export class ProductService {
             })
     }
 
-    async createProduct(requesProduct: ProductInterface) {
-        return await this.getProduct(requesProduct.id)
+    async createProduct(id: number, requesProduct: ProductInterface) {
+        return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
                     return this.prisma.product.create({
@@ -63,8 +63,8 @@ export class ProductService {
             })
     }
 
-    async updateUser(requesProduct: ProductInterface) {
-        return await this.getProduct(requesProduct.id)
+    async updateUser(id: number, requesProduct: ProductInterface) {
+        return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
                     throw new Error('Produto não encontrado!')

@@ -35,7 +35,7 @@ export class ProductController {
             price: req.query.price,
             serviceId: req.query.serviceId,
         }
-        return await this.productService.createProduct(prduct)
+        return await this.productService.createProduct(req.query.id, prduct)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);
@@ -62,7 +62,7 @@ export class ProductController {
             price: req.query.price,
             serviceId: req.query.serviceId,
         }
-        return await this.productService.updateUser(prduct)
+        return await this.productService.updateUser(req.query.id, prduct)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);
