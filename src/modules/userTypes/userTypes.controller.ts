@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, HttpCode, HttpStatus, InternalServerErrorException, Post, Put, Req } from "@nestjs/common";
-import { UserTypeInterface } from "../interfaces/userTypeInterface";
+import { UserTypeInterface } from "../../interfaces/userTypeInterface";
 import { UserTypeService } from "./userTypes.service";
 
 @Controller('userTypes')

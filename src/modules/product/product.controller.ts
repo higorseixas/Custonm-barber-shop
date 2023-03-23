@@ -9,7 +9,7 @@ import {
     Req,
     Delete
 } from '@nestjs/common';
-import { ProductInterface } from '../interfaces/productInterface';
+import { ProductInterface } from '../../interfaces/productInterface';
 import { ProductService } from './product.service';
 
 @Controller('product')

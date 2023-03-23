@@ -1,6 +1,6 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import { UserTypeInterface } from "../interfaces/userTypeInterface";
+import { UserTypeInterface } from "../../interfaces/userTypeInterface";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()

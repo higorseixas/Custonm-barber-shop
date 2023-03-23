@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, HttpCode, HttpStatus, InternalServerErrorException, Post, Put, Req } from "@nestjs/common";
-import { CustomerInterface } from "../interfaces/customerInterface";
+import { CustomerInterface } from "../../interfaces/customerInterface";
 import { CustomerService } from "./customer.service";
 
 @Controller('customer')
