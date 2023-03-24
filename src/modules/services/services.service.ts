@@ -3,7 +3,6 @@ import { Product } from '@prisma/client';
 import { ServiceInterface } from 'src/interfaces/serviceInterface';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { ProductService } from '../product/product.service';
-import ProductWhereUniqueInput from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
@@ -30,9 +29,9 @@ export class ServicesService {
       });
   }
 
-  async getAllServicesById(serviceId: number) {
+  async getServiceById(serviceId: number) {
     return this.prisma.service
-      .findMany({
+      .findUnique({
         where: { id: serviceId },
         select: { product: true, os: true },
       })
@@ -67,10 +66,7 @@ export class ServicesService {
   }
 
   async updateService(serviceId: number, service: ServiceInterface) {
-    return this.prisma.service
-      .findUnique({
-        where: { id: serviceId },
-      })
+    return await this.getServiceById(serviceId)
       .then(async (existingService) => {
         if (!existingService) {
           throw new Error('Service does not exist.');
@@ -105,16 +101,22 @@ export class ServicesService {
   }
 
   async deleteService(serviceId: number) {
-    return this.prisma.service
-      .delete({
-        where: {
-          id: serviceId,
-        },
-      })
-      .then((result) => result)
-      .catch((error) => {
-        console.log(error);
-        throw new Error();
-      });
+    return await this.getServiceById(serviceId)
+    .then(async (existingService) => {
+      if (!existingService) {
+          throw new Error('Servço não encontrada!')
+      } else {
+          return await this.prisma.service.delete({ where: { id: serviceId } })
+          .then((result) => result)
+          .catch((error) => {
+            console.log(error)
+            throw new Error(error.message)
+          })
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      throw new Error(error.message)
+    })
   }
 }
