@@ -11,7 +11,7 @@ import {
   Delete
 } from '@nestjs/common';
 import { ServiceInterface } from 'src/interfaces/serviceInterface';
-import { ServicesService } from './serices.service';
+import { ServicesService } from './services.service';
 
 @Controller('service')
 export class ServiceController {
@@ -51,7 +51,7 @@ export class ServiceController {
     const service: ServiceInterface = {
       product: req.query.products,
     };
-    return this.servicesService.createService(service)
+    return this.servicesService.createService(service.product)
       .then((createdService) => {
         return createdService;
       })
