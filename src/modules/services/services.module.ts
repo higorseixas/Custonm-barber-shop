@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ServiceController } from './services.controller';
-import { ServicesService } from './serices.service';
+import { ServicesService } from './services.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpModule } from '@nestjs/axios/dist';
 

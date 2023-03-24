@@ -1,3 +1,3 @@
 export interface ServiceInterface {
-  product: string[];
+  product: number[];
 }

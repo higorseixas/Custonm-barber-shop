@@ -10,4 +10,4 @@ import { ProductController } from './product.controller';
   exports: [ProductService],
   imports: [HttpModule]
 })
-export class UserModule {}
+export class ProdctModule {}

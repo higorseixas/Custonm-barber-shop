@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ProductInterface } from '../interfaces/productInterface';
+import { ProductInterface } from '../../interfaces/productInterface';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -28,8 +28,8 @@ export class ProductService {
             })
     }
 
-    async createProduct(requesProduct: ProductInterface) {
-        return await this.getProduct(requesProduct.id)
+    async createProduct(id: number, requesProduct: ProductInterface) {
+        return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
                     return this.prisma.product.create({
@@ -54,8 +54,8 @@ export class ProductService {
             })
     }
 
-    async getProduct(id: string) {
-        return await this.prisma.product.findUnique({ where: { id } })
+    async getProduct(id: number) {
+        return await this.prisma.product.findUnique({ where: { id: id } })
             .then((result) => result)
             .catch((error) => {
                 console.error(error)
@@ -63,14 +63,14 @@ export class ProductService {
             })
     }
 
-    async updateUser(requesProduct: ProductInterface) {
-        return await this.getProduct(requesProduct.id)
+    async updateUser(id: number, requesProduct: ProductInterface) {
+        return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
                     throw new Error('Produto não encontrado!')
                 } else {
                     return await this.prisma.product.update({
-                        where: { name: requesProduct.name },
+                        where: { id: product.id },
                         data: {
                             name: requesProduct.name,
                             price: requesProduct.price,
@@ -90,7 +90,7 @@ export class ProductService {
             })
     }
 
-    async deleteProduct(id: string) {
+    async deleteProduct(id: number) {
         return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
