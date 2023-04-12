@@ -7,9 +7,10 @@ import { ProdctModule } from './modules/product/product.module';
 import { OsModule } from './modules/os/os.module';
 import { UserModule } from './modules/user/user.module';
 import { UserTypeModule } from './modules/userTypes/userTypes.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ServiceModule],
+  imports: [ServiceModule, ConfigModule.forRoot(), UserModule, ProdctModule, CustomerModule, UserTypeModule, OsModule],
   controllers: [AppController],
   providers: [AppService, UserModule, ProdctModule, OsModule, CustomerModule, UserTypeModule],
 })
