@@ -10,8 +10,16 @@ import { UserTypeModule } from './modules/userTypes/userTypes.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ServiceModule, ConfigModule.forRoot(), UserModule, ProdctModule, CustomerModule, UserTypeModule, OsModule],
+  imports: [
+    ServiceModule, 
+    ConfigModule.forRoot(), 
+    UserModule, 
+    ProdctModule, 
+    CustomerModule, 
+    UserTypeModule, 
+    OsModule
+  ],
   controllers: [AppController],
   providers: [AppService, UserModule, ProdctModule, OsModule, CustomerModule, UserTypeModule],
 })
-export class AppModule {}
+export class AppModule { }
