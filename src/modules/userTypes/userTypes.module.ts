@@ -10,4 +10,4 @@ import { UserTypeService } from './userTypes.service';
     exports: [UserTypeService],
     imports: [HttpModule]
 })
-export class UserModule { }
+export class UserTypeModule { }

@@ -10,4 +10,4 @@ import { CustomerService } from './customer.service';
     exports: [CustomerService],
     imports: [HttpModule]
 })
-export class UserModule { }
+export class CustomerModule { }
