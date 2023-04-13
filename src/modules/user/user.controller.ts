@@ -7,6 +7,7 @@ import {
     Post,
     Put,
     Req,
+    Body,
     Delete
 } from '@nestjs/common';
 import { UserInterface } from '../../interfaces/userInterface';
@@ -29,13 +30,13 @@ export class UserController {
 
     @Post('createUser')
     @HttpCode(HttpStatus.OK)
-    async createUser(@Req() req) {
+    async createUser(@Body() body) {
         const user: UserInterface = {
-            name: req.query.name,
-            cpf: req.query.cpf,
-            cellphone: req.query.cellphone,
-            password: req.query.password,
-            typeId: req.query.typeId
+            name: body.name,
+            cpf: body.cpf,
+            cellphone: body.cellphone,
+            password: body.password,
+            typeId: body.typeId
         }
         return await this.userService.createUser(user)
             .then((result) => result)
@@ -47,8 +48,8 @@ export class UserController {
 
     @Get('getUser')
     @HttpCode(HttpStatus.OK)
-    async getUser(@Req() req) {
-        return await this.userService.getUser(req.query.cpf)
+    async getUser(@Body() body) {
+        return await this.userService.getUser(body.cpf)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);

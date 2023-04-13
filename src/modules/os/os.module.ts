@@ -3,11 +3,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import { HttpModule } from '@nestjs/axios';
 import { OsService } from './os.service';
 import { OsController } from './os.controller';
+import { ServicesService } from '../services/services.service';
+import { ProductService } from '../product/product.service';
 
 @Module({
   controllers: [OsController],
-  providers: [OsService, PrismaService],
+  providers: [OsService, PrismaService, ServicesService, ProductService],
   exports: [OsService],
   imports: [HttpModule]
 })
-export class OsModule {}
+export class OsModule { }

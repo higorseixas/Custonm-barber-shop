@@ -31,19 +31,19 @@ export class ServiceController {
       });
   }
 
-  @Get('getAllServicesById')
-  @HttpCode(HttpStatus.OK)
-  async getAllServicesById(@Req() req) {
-    return await this.servicesService
-      .getAllServicesById(req.query.id)
-      .then((result) => {
-        return result;
-      })
-      .catch((e) => {
-        console.log(e);
-        throw new InternalServerErrorException();
-      });
-  }
+  // @Get('getAllServicesById')
+  // @HttpCode(HttpStatus.OK)
+  // async getAllServicesById(@Req() req) {
+  //   return await this.servicesService
+  //     .getAllServicesById(req.query.id)
+  //     .then((result) => {
+  //       return result;
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //       throw new InternalServerErrorException();
+  //     });
+  // }
 
   @Post('createService')
   @HttpCode(HttpStatus.OK)
