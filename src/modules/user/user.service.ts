@@ -1,9 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserInterface } from '../../interfaces/userInterface';
 import { PrismaService } from '../prisma/prisma.service';
-import bcrypt from 'bcryptjs';
-
+import { compare, hash } from 'bcryptjs';
+import { sign, Secret } from 'jsonwebtoken';
+import authConfig from '../../config/auth';
 
 @Injectable()
 export class UserService {
@@ -38,8 +39,7 @@ export class UserService {
         return await this.getUser(requestUser.cpf)
             .then(async (user) => {
                 if (!user) {
-                    const saltRounds = 10;
-                    const hashedPassword = await (await bcrypt.hash(requestUser.password, saltRounds)).slice(0, 64);
+                    const hashedPassword = await hash(requestUser.password, 10)
 
                     return this.prisma.user.create({
                         data: {
@@ -84,7 +84,6 @@ export class UserService {
                         where: { cpf: requestUser.cpf },
                         data: {
                             name: requestUser.name,
-                            password: requestUser.password,
                             cellphone: requestUser.cellphone,
                             typeId: requestUser.typeId
                         }
@@ -120,5 +119,31 @@ export class UserService {
                 console.log(error)
                 throw new Error(error.message)
             })
+    }
+
+    async userLogin(requestUser: UserInterface) {
+        return await this.getUser(requestUser.cpf)
+        .then(async (user) => {
+            if (!user) {
+                throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
+            } else {
+                const passwordConfirmed = await compare(requestUser.password, user.password);
+                
+                if (!passwordConfirmed) {
+                    throw new HttpException('Senha invalida!', HttpStatus.UNAUTHORIZED);
+                } else {
+                    const token = sign({}, authConfig.jwt.secret as Secret, {
+                        subject: user.toString(),
+                        expiresIn: authConfig.jwt.expiresIn,
+                    });
+
+                    return { user, token };
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            throw new Error(error.message)
+        })
     }
 }
