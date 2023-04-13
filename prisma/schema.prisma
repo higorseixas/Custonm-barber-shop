@@ -25,7 +25,7 @@ model User {
   name       String
   cellphone  String
   userType   UserTypes    @relation(fields: [typeId], references: [id])
-  typeId     Int          @unique
+  typeId     Int          
   scheduling Scheduling[]
   os         Os[]
   createdAt  DateTime     @default(now())
