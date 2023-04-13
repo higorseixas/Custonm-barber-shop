@@ -2,6 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { UserInterface } from '../../interfaces/userInterface';
 import { PrismaService } from '../prisma/prisma.service';
+import bcrypt from 'bcryptjs';
+
 
 @Injectable()
 export class UserService {
@@ -36,11 +38,14 @@ export class UserService {
         return await this.getUser(requestUser.cpf)
             .then(async (user) => {
                 if (!user) {
+                    const saltRounds = 10;
+                    const hashedPassword = await (await bcrypt.hash(requestUser.password, saltRounds)).slice(0, 64);
+
                     return this.prisma.user.create({
                         data: {
                             name: requestUser.name,
                             cpf: requestUser.cpf.replace(/[^a-zA-Z0-9]/g, ''),
-                            password: requestUser.password,
+                            password: hashedPassword,
                             cellphone: requestUser.cellphone,
                             typeId: requestUser.typeId
                         }
