@@ -10,6 +10,7 @@ import {
     Body,
     Delete
 } from '@nestjs/common';
+import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
 import { UserInterface } from '../../interfaces/userInterface';
 import { UserService } from './user.service';
 
@@ -79,6 +80,21 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     async deteleUser(@Req() req) {
         return await this.userService.deleteUser(req.query.cpf)
+            .then((result) => result)
+            .catch((error) => {
+                console.log(error);
+                throw new InternalServerErrorException();
+            })
+    }
+
+    @Post('userLogin')
+    @HttpCode(HttpStatus.OK)
+    async userLogin(@Body() body) {
+        const user: IUserAuthenticated = {
+            cpf: body.cpf,
+            password: body.password,
+        }
+        return await this.userService.userLogin(user)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);

@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { compare, hash } from 'bcryptjs';
 import { sign, Secret } from 'jsonwebtoken';
 import authConfig from '../../config/auth';
+import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
 
 @Injectable()
 export class UserService {
@@ -121,7 +122,7 @@ export class UserService {
             })
     }
 
-    async userLogin(requestUser: UserInterface) {
+    async userLogin(requestUser: IUserAuthenticated) {
         return await this.getUser(requestUser.cpf)
         .then(async (user) => {
             if (!user) {
