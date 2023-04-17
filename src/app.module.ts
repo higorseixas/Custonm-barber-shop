@@ -8,6 +8,7 @@ import { OsModule } from './modules/os/os.module';
 import { UserModule } from './modules/user/user.module';
 import { UserTypeModule } from './modules/userTypes/userTypes.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,9 +18,10 @@ import { ConfigModule } from '@nestjs/config';
     ProdctModule, 
     CustomerModule, 
     UserTypeModule, 
-    OsModule
+    OsModule,
+    AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService, UserModule, ProdctModule, OsModule, CustomerModule, UserTypeModule],
+  providers: [AppService, UserModule, ProdctModule, OsModule, CustomerModule, UserTypeModule, AuthModule],
 })
 export class AppModule { }

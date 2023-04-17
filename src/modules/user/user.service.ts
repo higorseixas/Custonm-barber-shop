@@ -2,16 +2,15 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserInterface } from '../../interfaces/userInterface';
 import { PrismaService } from '../prisma/prisma.service';
-import { compare, hash } from 'bcryptjs';
-import { sign, Secret } from 'jsonwebtoken';
-import authConfig from '../../config/auth';
-import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
+import { hash } from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
     constructor(
         private prisma: PrismaService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly jwtService: JwtService,
     ) { }
 
     async getAllUsers() {
@@ -62,6 +61,15 @@ export class UserService {
             })
             .catch((error) => {
                 console.log(error)
+                throw new Error(error.message)
+            })
+    }
+
+    async getUserById(id: number) {
+        return await this.prisma.user.findUnique({ where: { id: id } })
+            .then((result) => result)
+            .catch((error) => {
+                console.error(error)
                 throw new Error(error.message)
             })
     }
@@ -122,29 +130,23 @@ export class UserService {
             })
     }
 
-    async userLogin(requestUser: IUserAuthenticated) {
-        return await this.getUser(requestUser.cpf)
-        .then(async (user) => {
-            if (!user) {
-                throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
+    async getUserFromToken(token: string): Promise<UserInterface> {
+        return this.jwtService.verifyAsync(token)
+            .then(async (payload) => {
+            const user = await this.getUserById(payload.sub)
+    
+            if (user) {
+                return user;
+    
             } else {
-                const passwordConfirmed = await compare(requestUser.password, user.password);
-                
-                if (!passwordConfirmed) {
-                    throw new HttpException('Senha invalida!', HttpStatus.UNAUTHORIZED);
-                } else {
-                    const token = sign({}, authConfig.jwt.secret as Secret, {
-                        subject: user.toString(),
-                        expiresIn: authConfig.jwt.expiresIn,
-                    });
-
-                    return { user, token };
-                }
+                throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
             }
-        })
-        .catch((error) => {
-            console.log(error)
-            throw new Error(error.message)
-        })
+    
+            })
+            .catch((error) => {
+            console.log(error);
+            throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
+            });
     }
+
 }

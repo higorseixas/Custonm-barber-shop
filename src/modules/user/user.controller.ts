@@ -8,7 +8,8 @@ import {
     Put,
     Req,
     Body,
-    Delete
+    Delete,
+    HttpException
 } from '@nestjs/common';
 import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
 import { UserInterface } from '../../interfaces/userInterface';
@@ -40,6 +41,17 @@ export class UserController {
             typeId: body.typeId
         }
         return await this.userService.createUser(user)
+            .then((result) => result)
+            .catch((error) => {
+                console.log(error);
+                throw new InternalServerErrorException();
+            })
+    }
+
+    @Get('getUserById')
+    @HttpCode(HttpStatus.OK)
+    async getUserById(@Body() body) {
+        return await this.userService.getUserById(body.id)
             .then((result) => result)
             .catch((error) => {
                 console.log(error);
@@ -87,18 +99,17 @@ export class UserController {
             })
     }
 
-    @Post('userLogin')
+    
+    @Get('getUserFromToken')
     @HttpCode(HttpStatus.OK)
-    async userLogin(@Body() body) {
-        const user: IUserAuthenticated = {
-            cpf: body.cpf,
-            password: body.password,
-        }
-        return await this.userService.userLogin(user)
-            .then((result) => result)
-            .catch((error) => {
-                console.log(error);
-                throw new InternalServerErrorException();
-            })
-    }
+    async getUserFromToken(@Req() req): Promise<UserInterface> {
+        return this.userService.getUserFromToken(req.query.token)
+          .then((result) => {
+            return result;
+          })
+          .catch((error) => {
+            throw new HttpException(error.message, error.status);
+          });
+      }
+
 }
