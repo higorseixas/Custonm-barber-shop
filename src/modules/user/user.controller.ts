@@ -11,7 +11,6 @@ import {
     Delete,
     HttpException
 } from '@nestjs/common';
-import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
 import { UserInterface } from '../../interfaces/userInterface';
 import { UserService } from './user.service';
 
@@ -110,6 +109,6 @@ export class UserController {
           .catch((error) => {
             throw new HttpException(error.message, error.status);
           });
-      }
+    }
 
 }

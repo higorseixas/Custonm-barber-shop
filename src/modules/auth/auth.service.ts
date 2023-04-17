@@ -5,7 +5,6 @@ import { compare } from 'bcryptjs';
 import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { urlencoded } from 'express';
 
 
 @Injectable()

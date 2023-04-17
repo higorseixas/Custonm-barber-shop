@@ -1,17 +1,12 @@
 import {
     Controller,
-    Get,
     InternalServerErrorException,
     HttpCode,
     HttpStatus,
     Post,
-    Put,
-    Req,
     Body,
-    Delete
 } from '@nestjs/common';
 import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
-import { UserInterface } from '../../interfaces/userInterface';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

@@ -131,12 +131,16 @@ export class UserService {
     }
 
     async getUserFromToken(token: string): Promise<UserInterface> {
+        console.log(token)
         return this.jwtService.verifyAsync(token)
             .then(async (payload) => {
             const user = await this.getUserById(payload.sub)
     
             if (user) {
-                return user;
+                const userWithoutPassword = { ...user };
+                delete userWithoutPassword.password;
+
+                return userWithoutPassword;
     
             } else {
                 throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
