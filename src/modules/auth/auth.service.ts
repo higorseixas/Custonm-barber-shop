@@ -5,6 +5,7 @@ import { compare } from 'bcryptjs';
 import { IUserAuthenticated } from 'src/interfaces/IUserAuthenticated';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+import { urlencoded } from 'express';
 
 
 @Injectable()
@@ -27,11 +28,15 @@ export class AuthService {
                 if (!passwordConfirmed) {
                     throw new HttpException('Senha invalida!', HttpStatus.UNAUTHORIZED);
                 } else {
+
+                    const userWithoutPassword = { ...user };
+                    delete userWithoutPassword.password;
+
                     const payload = { usertype: user.typeId, sub: user.id };
 
                     const token = await this.jwtService.signAsync(payload)
 
-                    return { user, token };
+                    return { userWithoutPassword, token };
                 }
             }
         })
