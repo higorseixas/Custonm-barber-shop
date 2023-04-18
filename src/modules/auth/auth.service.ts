@@ -18,24 +18,24 @@ export class AuthService {
 
     async signInUser(requestUser: IUserAuthenticated) {
         return await this.userService.getUser(requestUser.cpf)
-        .then(async (user) => {
-            if (!user) {
+        .then(async (userInfo) => {
+            if (!userInfo) {
                 throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
             } else {
-                const passwordConfirmed = await compare(requestUser.password, user.password);
+                const passwordConfirmed = await compare(requestUser.password, userInfo.password);
                 
                 if (!passwordConfirmed) {
                     throw new HttpException('Senha invalida!', HttpStatus.UNAUTHORIZED);
                 } else {
 
-                    const userWithoutPassword = { ...user };
-                    delete userWithoutPassword.password;
+                    const user = { ...userInfo };
+                    delete user.password;
 
                     const payload = { usertype: user.typeId, sub: user.id };
 
                     const token = await this.jwtService.signAsync(payload)
 
-                    return { userWithoutPassword, token };
+                    return { user, token };
                 }
             }
         })

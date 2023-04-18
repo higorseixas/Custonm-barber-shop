@@ -40,14 +40,14 @@ export class UserService {
             .then(async (user) => {
                 if (!user) {
                     const hashedPassword = await hash(requestUser.password, 10)
-
+                    const typeIdInt = parseInt(requestUser.typeId.toString())
                     return this.prisma.user.create({
                         data: {
                             name: requestUser.name,
                             cpf: requestUser.cpf.replace(/[^a-zA-Z0-9]/g, ''),
                             password: hashedPassword,
                             cellphone: requestUser.cellphone,
-                            typeId: requestUser.typeId
+                            typeId: typeIdInt
                         }
                     })
                         .then((result) => result)
@@ -131,25 +131,21 @@ export class UserService {
     }
 
     async getUserFromToken(token: string): Promise<UserInterface> {
-        console.log(token)
         return this.jwtService.verifyAsync(token)
             .then(async (payload) => {
-            const user = await this.getUserById(payload.sub)
-    
-            if (user) {
-                const userWithoutPassword = { ...user };
-                delete userWithoutPassword.password;
+                const userInfo = await this.getUserById(payload.sub)
+                if (userInfo) {
+                    const user = { ...userInfo };
+                    delete user.password;
 
-                return userWithoutPassword;
-    
-            } else {
-                throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
-            }
-    
+                    return user;
+                } else {
+                    throw new HttpException('Usuário não encontrado!', HttpStatus.UNAUTHORIZED);
+                }
             })
             .catch((error) => {
-            console.log(error);
-            throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
+                console.log(error);
+                throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
             });
     }
 

@@ -102,6 +102,7 @@ export class UserController {
     @Get('getUserFromToken')
     @HttpCode(HttpStatus.OK)
     async getUserFromToken(@Req() req): Promise<UserInterface> {
+        console.log(req.query.token)
         return this.userService.getUserFromToken(req.query.token)
           .then((result) => {
             return result;
