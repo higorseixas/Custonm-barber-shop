@@ -102,8 +102,8 @@ export class UserController {
     @Get('getUserFromToken')
     @HttpCode(HttpStatus.OK)
     async getUserFromToken(@Req() req): Promise<UserInterface> {
-        console.log(req.query.token)
-        return this.userService.getUserFromToken(req.query.token)
+        const token = req.headers.authorization.split(' ')[1];
+        return this.userService.getUserFromToken(token)
           .then((result) => {
             return result;
           })
