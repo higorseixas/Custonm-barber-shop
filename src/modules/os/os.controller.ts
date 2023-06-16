@@ -7,16 +7,19 @@ import {
   Post,
   Put,
   Req,
-  Delete
+  Delete,
+  UseGuards
 } from '@nestjs/common';
 import { OsInterface } from 'src/interfaces/osInterface';
 import { OsService } from './os.service';
+import { JWTServiceGuard } from '../guards/services.guard';
 
 @Controller('os')
 export class OsController {
   constructor(private readonly osService: OsService) { }
 
   @Get('getAllServices')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async getAllOs() {
     return await this.osService.getAllOs()
@@ -28,6 +31,7 @@ export class OsController {
   }
 
   @Get('getOsById')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async getOsById(@Req() req) {
     return await this.osService.getOsById(req.query.id)
@@ -39,6 +43,7 @@ export class OsController {
   }
 
   @Post('createOs')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async createOs(@Req() req) {
     const os: OsInterface = {
@@ -57,6 +62,7 @@ export class OsController {
   }
 
   @Put('updateOs')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async updateOs(@Req() req) {
     const os: OsInterface = {
@@ -75,6 +81,7 @@ export class OsController {
   }
 
   @Delete('deleteOs')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async deteleUser(@Req() req) {
     return await this.osService.deleteOs(req.query.cpf)
