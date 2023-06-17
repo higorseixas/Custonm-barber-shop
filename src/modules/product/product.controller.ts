@@ -7,16 +7,19 @@ import {
     Post,
     Put,
     Req,
-    Delete
+    Delete,
+    UseGuards
 } from '@nestjs/common';
 import { ProductInterface } from '../../interfaces/productInterface';
 import { ProductService } from './product.service';
+import { JWTServiceGuard } from '../guards/services.guard';
 
 @Controller('product')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }
 
     @Get('getAllProducts')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async getUsers() {
         return await this.productService.getAllProducts()
@@ -28,6 +31,7 @@ export class ProductController {
     }
 
     @Post('createProduct')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async createProduct(@Req() req) {
         const prduct: ProductInterface = {
@@ -44,6 +48,7 @@ export class ProductController {
     }
 
     @Get('getProduct')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async getProduct(@Req() req) {
         return await this.productService.getProduct(req.query.id)
@@ -55,6 +60,7 @@ export class ProductController {
     }
 
     @Put('updateUser')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async updateUser(@Req() req) {
         const prduct: ProductInterface = {
@@ -71,6 +77,7 @@ export class ProductController {
     }
 
     @Delete('deleteProduct')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async deleteProduct(@Req() req) {
         return await this.productService.deleteProduct(req.query.id)

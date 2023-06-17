@@ -8,16 +8,19 @@ import {
   Post,
   Put,
   Req,
-  Delete
+  Delete,
+  UseGuards
 } from '@nestjs/common';
 import { ServiceInterface } from 'src/interfaces/serviceInterface';
 import { ServicesService } from './services.service';
+import { JWTServiceGuard } from '../guards/services.guard';
 
 @Controller('service')
 export class ServiceController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get('getAllServices')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async getAllServices() {
     return await this.servicesService
@@ -46,6 +49,7 @@ export class ServiceController {
   // }
 
   @Post('createService')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async createService(@Req() req) {
     const service: ServiceInterface = {
@@ -61,6 +65,7 @@ export class ServiceController {
   }
 
   @Put('updateService')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async updateService(@Req() req) {
     const service: ServiceInterface = {
@@ -77,6 +82,7 @@ export class ServiceController {
   }
 
   @Delete('deleteService')
+  @UseGuards(JWTServiceGuard)
   @HttpCode(HttpStatus.OK)
   async deleteService(@Req() req) {
     return this.servicesService.deleteService(req.query.id)

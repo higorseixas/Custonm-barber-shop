@@ -9,16 +9,19 @@ import {
     Req,
     Body,
     Delete,
-    HttpException
+    HttpException,
+    UseGuards
 } from '@nestjs/common';
 import { UserInterface } from '../../interfaces/userInterface';
 import { UserService } from './user.service';
+import { JWTServiceGuard } from '../guards/services.guard';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Get('getAllUsers')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async getUsers() {
         return await this.userService.getAllUsers()
@@ -30,6 +33,7 @@ export class UserController {
     }
 
     @Post('createUser')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async createUser(@Body() body) {
         const user: UserInterface = {
@@ -48,6 +52,7 @@ export class UserController {
     }
 
     @Get('getUserById')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async getUserById(@Body() body) {
         return await this.userService.getUserById(body.id)
@@ -59,6 +64,7 @@ export class UserController {
     }
 
     @Get('getUser')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async getUser(@Body() body) {
         return await this.userService.getUser(body.cpf)
@@ -70,6 +76,7 @@ export class UserController {
     }
 
     @Put('updateUser')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async updateUser(@Req() req) {
         const user: UserInterface = {
@@ -88,6 +95,7 @@ export class UserController {
     }
 
     @Delete('deleteUser')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async deteleUser(@Req() req) {
         return await this.userService.deleteUser(req.query.cpf)
@@ -100,6 +108,7 @@ export class UserController {
 
     
     @Get('getUserFromToken')
+    @UseGuards(JWTServiceGuard)
     @HttpCode(HttpStatus.OK)
     async getUserFromToken(@Req() req): Promise<UserInterface> {
         const token = req.headers.authorization.split(' ')[1];
