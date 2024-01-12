@@ -80,7 +80,7 @@ model Customer {
   id         Int          @id @default(autoincrement())
   cpf        String?      @unique
   name       String
-  cellphone  String
+  cellphone  String       @unique
   email      String       @unique
   scheduling Scheduling[]
   os         Os[]

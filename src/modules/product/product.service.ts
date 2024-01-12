@@ -94,7 +94,7 @@ export class ProductService {
         return await this.getProduct(id)
             .then(async (product) => {
                 if (!product) {
-                    throw new Error('Usuário não encontrado!')
+                    throw new Error('Produto não encontrado!')
                 } else {
                     return await this.prisma.product.delete({ where: { id } })
                         .then((result) => result)
